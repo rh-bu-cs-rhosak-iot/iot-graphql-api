@@ -3,20 +3,10 @@ import express from 'express';
 import http from 'http';
 import { HTTP_PORT } from './config';
 import log from './log';
+import typeDefs from './graphql/schema';
+import resolvers from './graphql/resolvers';
 
 const app = express();
-
-const typeDefs = `
-  type Query {
-    info: String!
-  }
-`;
-
-const resolvers = {
-  Query: {
-    info: () => `This is the API of the meters IoT data`
-  }
-};
 
 const apolloServer = new ApolloServer({ typeDefs, resolvers });
 
