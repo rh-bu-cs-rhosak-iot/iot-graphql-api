@@ -5,6 +5,8 @@ import { HTTP_PORT } from './config';
 import log from './log';
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers';
+import { createTerminus } from '@godaddy/terminus';
+import options from './health/health';
 
 const app = express();
 
@@ -15,7 +17,9 @@ const start = async () => {
     .start()
     .then(() => {
       apolloServer.applyMiddleware({ app });
-      http.createServer(app).listen({ port: HTTP_PORT }, () => {
+      const server = http.createServer(app);
+      createTerminus(server, options);
+      server.listen({ port: HTTP_PORT }, () => {
         log.info(
           `🚀 GraphQL Server ready at http://localhost:${HTTP_PORT}${apolloServer.graphqlPath}`
         );

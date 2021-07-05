@@ -11,6 +11,7 @@
     "lint": "prettier src/**/*.ts --trailing-comma=none --single-quote --check"
   },
   "dependencies": {
+    "@godaddy/terminus": "^4.9.0",
     "apollo-server": "^2.25.2",
     "apollo-server-express": "^2.25.2",
     "env-var": "^7.0.1",
