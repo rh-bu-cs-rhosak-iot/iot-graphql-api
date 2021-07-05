@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc",
-    "dev": "nodemon --config nodemon.json --exec 'ts-node' dist/server.js",
+    "dev": "nodemon --config nodemon.json --exec 'ts-node' src/server.ts",
     "format": "prettier src/**/*.ts --trailing-comma=none --single-quote --write",
     "lint": "prettier src/**/*.ts --trailing-comma=none --single-quote --check"
   },
