@@ -17,6 +17,8 @@
     "env-var": "^7.0.1",
     "express": "^4.17.1",
     "graphql": "^15.5.1",
+    "knex": "^0.95.6",
+    "pg": "^8.6.0",
     "pino": "^6.11.3"
   },
   "devDependencies": {

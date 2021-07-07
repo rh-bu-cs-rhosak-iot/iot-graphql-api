@@ -7,10 +7,12 @@ import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers';
 import { createTerminus } from '@godaddy/terminus';
 import options from './health/health';
+import { context } from './graphql/context';
+import { graphql } from 'graphql';
 
 const app = express();
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers });
+const apolloServer = new ApolloServer({ typeDefs, resolvers, context});
 
 const start = async () => {
   apolloServer

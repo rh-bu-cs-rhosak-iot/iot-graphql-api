@@ -1,41 +1,26 @@
-const meters = [
-  {
-    id: 'ggDOTAdDY_ngKoQnkktO8',
-    address: '1301 N LA BREA AVE',
-    latitude: 34.095452,
-    longitude: -118.344219
-  },
-  {
-    id: 'zXs425XAfaEFHnFDH0_G5',
-    address: '1301 N LA BREA AVE',
-    latitude: 34.095795,
-    longitude: -118.34422
-  }
-];
+import { Context } from './context';
+import { FindByArgs } from './interfaces';
 
 const resolvers = {
   Query: {
-    meters: () => meters,
-    meter: (_parent: any, { id }: any, _context: any) => {
-      if (id == 'ggDOTAdDY_ngKoQnkktO8') {
-        return {
-          id: 'ggDOTAdDY_ngKoQnkktO8',
-          address: '1301 N LA BREA AVE',
-          latitude: 34.095452,
-          longitude: -118.344219,
-          status: 'out of order'
-        };
-      } else if (id == 'zXs425XAfaEFHnFDH0_G5') {
-        return {
-          id: 'zXs425XAfaEFHnFDH0_G5',
-          address: '1301 N LA BREA AVE',
-          latitude: 34.095795,
-          longitude: -118.34422,
-          status: 'free'
-        };
-      } else {
-        return {};
-      }
+    meters: async (parent, args: FindByArgs, context: Context) => {
+      const items = await context.meterDataProvider.findBy(args);
+      const resultPageInfo = {
+        offset: 0,
+        ...args.page
+      };
+      const count: number = await context.meterDataProvider.count(args.filter);
+      return {
+        items,
+        count,
+        ...resultPageInfo
+      };
+    },
+    meter: async (parent, { id }: any, context: Context) => {
+      return context.meterDataProvider.findOne({ id: id });
+    },
+    countMeters: async (parent, args, context: Context) => {
+      return context.meterDataProvider.count();
     }
   },
   Meter: {
