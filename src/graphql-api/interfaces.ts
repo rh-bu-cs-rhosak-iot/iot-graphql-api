@@ -1,3 +1,4 @@
+import { GraphQLDataProvider } from './graphql-data-provider';
 import { QueryFilter } from './queryfilter';
 
 export interface Page {
@@ -20,8 +21,14 @@ export interface FindByArgs {
 
 export interface ModelTableMap {
   tableName: string;
-  idField: string;
-  fieldMap: {
-    [key: string]: string;
+  fields?: string[];
+}
+
+export interface Context {
+  dataProviders: {
+    [key: string]: GraphQLDataProvider;
+  };
+  tableMaps: {
+    [key: string]: ModelTableMap;
   };
 }

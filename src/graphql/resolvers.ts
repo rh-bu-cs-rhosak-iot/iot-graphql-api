@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { Context } from './context';
+import { Context } from '../graphql-api/interfaces';
 import { FindByArgs } from '../graphql-api/interfaces';
 import {
   getResolverInfoFieldsList,
@@ -19,14 +19,14 @@ const resolvers = {
       if (info) {
         selectedFields = getSelectedFieldsFromResolverInfo(
           info,
-          context.meterModel,
+          context.tableMaps['meter'],
           'items'
         );
         requestedCount = getResolverInfoFieldsList(info).some(
           (field: string) => field === 'count'
         );
       }
-      const items = await context.meterDataProvider.findBy(
+      const items = await context.dataProviders['meter'].findBy(
         args,
         selectedFields
       );
@@ -36,7 +36,7 @@ const resolvers = {
       };
       let count: number = 0;
       if (requestedCount) {
-        count = await context.meterDataProvider.count(args.filter);
+        count = await context.dataProviders['meter'].count(args.filter);
       }
       return {
         items,
@@ -54,13 +54,13 @@ const resolvers = {
       if (info) {
         selectedFields = getSelectedFieldsFromResolverInfo(
           info,
-          context.meterModel
+          context.tableMaps['meter']
         );
       }
-      return context.meterDataProvider.findOne({ id: id }, selectedFields);
+      return context.dataProviders['meter'].findOne({ id: id }, selectedFields);
     },
     countMeters: async (parent, args, context: Context) => {
-      return context.meterDataProvider.count();
+      return context.dataProviders['meter'].count();
     }
   },
   Meter: {

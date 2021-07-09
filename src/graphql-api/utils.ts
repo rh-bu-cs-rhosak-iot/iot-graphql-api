@@ -1,6 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { fieldsList, fieldsMap } from 'graphql-fields-list';
-import { ModelTableMap } from './interfaces';
+import { Context, ModelTableMap } from './interfaces';
 
 export const getResolverInfoFieldsList = (
   info: GraphQLResolveInfo,
@@ -9,12 +9,16 @@ export const getResolverInfoFieldsList = (
 
 export const getSelectedFieldsFromResolverInfo = (
   info: GraphQLResolveInfo,
-  model: ModelTableMap,
+  tableMap?: ModelTableMap,
   path?: string
 ): string[] => {
   const resolverFields = Object.keys(fieldsMap(info, { path }));
 
-  return getModelFieldsFromResolverFields(resolverFields, model);
+  if (tableMap) {
+    return getModelFieldsFromResolverFields(resolverFields, tableMap);
+  } else {
+    return [];
+  }
 };
 
 export const getModelFieldsFromResolverFields = (
@@ -24,9 +28,8 @@ export const getModelFieldsFromResolverFields = (
   const selectedFields = new Set<string>();
 
   for (const key of resolverFields) {
-    const correspondingFieldInDatabase = model.fieldMap[key];
-    if (correspondingFieldInDatabase) {
-      selectedFields.add(correspondingFieldInDatabase);
+    if (model.fields?.includes(key)) {
+      selectedFields.add(model.fields[model.fields.indexOf(key)]);
     }
   }
 
