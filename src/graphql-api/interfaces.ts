@@ -19,10 +19,9 @@ export interface FindByArgs {
 }
 
 export interface ModelTableMap {
-  typeName: string;
   tableName: string;
   idField: string;
-  fieldMap?: {
+  fieldMap: {
     [key: string]: string;
   };
 }

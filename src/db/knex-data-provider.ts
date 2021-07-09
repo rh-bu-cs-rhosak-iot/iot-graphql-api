@@ -1,7 +1,7 @@
 import { Knex } from 'knex';
-import { GraphQLDataProvider } from '../graphql/graphql-data-provider';
-import { FindByArgs, ModelTableMap, Page } from '../graphql/interfaces';
-import { QueryFilter } from '../graphql/queryfilter';
+import { GraphQLDataProvider } from '../graphql-api/graphql-data-provider';
+import { FindByArgs, ModelTableMap, Page } from '../graphql-api/interfaces';
+import { QueryFilter } from '../graphql-api/queryfilter';
 import { buildQuery } from './knex-query-mapper';
 import { NoDataError } from './errors';
 

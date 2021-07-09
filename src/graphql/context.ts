@@ -1,14 +1,18 @@
 import { Knex } from 'knex';
 import { connectDB } from '../db/db';
 import { KnexDBDataProvider } from '../db/knex-data-provider';
-import { GraphQLDataProvider } from './graphql-data-provider';
-import { ModelTableMap } from './interfaces';
+import { GraphQLDataProvider } from '../graphql-api/graphql-data-provider';
+import { ModelTableMap } from '../graphql-api/interfaces';
 
 const meterModel: ModelTableMap = {
-  typeName: `Meter`,
   tableName: `meter`,
   idField: `id`,
-  fieldMap: {}
+  fieldMap: {
+    id: `id`,
+    address: `address`,
+    longitude: `longitude`,
+    latitude: `latitude`
+  }
 };
 
 function createMeterKnexDbProvider(db: Knex) {

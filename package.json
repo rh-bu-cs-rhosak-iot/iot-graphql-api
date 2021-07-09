@@ -5,25 +5,30 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsc",
+    "build": "tsc && copyfiles -f src/graphql/schema/* dist/graphql/schema" ,
     "dev": "nodemon --config nodemon.json --exec 'ts-node' src/server.ts",
     "format": "prettier src/**/*.ts --trailing-comma=none --single-quote --write",
     "lint": "prettier src/**/*.ts --trailing-comma=none --single-quote --check"
   },
   "dependencies": {
     "@godaddy/terminus": "^4.9.0",
+    "@graphql-tools/graphql-file-loader": "^6.2.7",
+    "@graphql-tools/load": "^6.2.8",
     "apollo-server": "^2.25.2",
     "apollo-server-express": "^2.25.2",
     "env-var": "^7.0.1",
     "express": "^4.17.1",
     "graphql": "^15.5.1",
+    "graphql-fields-list": "^2.2.4",
     "knex": "^0.95.6",
+    "path": "^0.12.7",
     "pg": "^8.6.0",
     "pino": "^6.11.3"
   },
   "devDependencies": {
     "@types/node": "^12.20.15",
     "@types/pino": "^6.3.8",
+    "copyfiles": "^2.4.1",
     "nodemon": "^2.0.9",
     "prettier": "^2.3.2",
     "ts-node": "^10.0.0",

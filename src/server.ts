@@ -1,18 +1,20 @@
-import { ApolloServer } from 'apollo-server-express';
+import { addResolveFunctionsToSchema, addSchemaLevelResolveFunction, ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import http from 'http';
 import { HTTP_PORT } from './config';
 import log from './log';
-import typeDefs from './graphql/schema';
+import schema from './graphql/load-schema';
 import resolvers from './graphql/resolvers';
 import { createTerminus } from '@godaddy/terminus';
 import options from './health/health';
 import { context } from './graphql/context';
-import { graphql } from 'graphql';
+import { graphql, GraphQLSchema } from 'graphql';
 
 const app = express();
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers, context});
+addResolveFunctionsToSchema({ schema, resolvers });
+
+const apolloServer = new ApolloServer({ schema, context});
 
 const start = async () => {
   apolloServer
