@@ -4,6 +4,7 @@ type Meter {
   latitude: Float!
   longitude: Float!
   status: String
+  updated: Int
 }
 
 type MeterResultList {

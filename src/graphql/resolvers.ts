@@ -2,9 +2,12 @@ import { GraphQLResolveInfo } from 'graphql';
 import { Context } from '../graphql-api/interfaces';
 import { FindByArgs } from '../graphql-api/interfaces';
 import {
+  getFieldsFromResolver,
   getResolverInfoFieldsList,
+  getSelectedFields,
   getSelectedFieldsFromResolverInfo
 } from '../graphql-api/utils';
+import { MeterStatusService } from '../iot-streams-service/iot-streams-service';
 
 const resolvers = {
   Query: {
@@ -50,14 +53,31 @@ const resolvers = {
       context: Context,
       info: GraphQLResolveInfo
     ) => {
+      let resolverFields: string[] = [];
       let selectedFields: string[] = [];
+
       if (info) {
-        selectedFields = getSelectedFieldsFromResolverInfo(
-          info,
+        resolverFields = getFieldsFromResolver(info);
+        selectedFields = getSelectedFields(
+          resolverFields,
           context.tableMaps['meter']
         );
       }
-      return context.dataProviders['meter'].findOne({ id: id }, selectedFields);
+      let result = await context.dataProviders['meter'].findOne(
+        { id: id },
+        selectedFields
+      );
+      if (
+        resolverFields.includes('status') ||
+        resolverFields.includes('updated')
+      ) {
+        let meterStatus = await MeterStatusService.getStatus(id);
+        if (meterStatus) {
+          result.status = meterStatus.status;
+          result.updated = meterStatus.timestamp;
+        }
+      }
+      return result;
     },
     countMeters: async (parent, args, context: Context) => {
       return context.dataProviders['meter'].count();

@@ -12,10 +12,17 @@ export const getSelectedFieldsFromResolverInfo = (
   tableMap?: ModelTableMap,
   path?: string
 ): string[] => {
-  const resolverFields = Object.keys(fieldsMap(info, { path }));
+  const resolverFields = getFieldsFromResolver(info, path);
 
+  return getSelectedFields(resolverFields, tableMap);
+};
+
+export const getSelectedFields = (
+  fields: string[],
+  tableMap?: ModelTableMap
+): string[] => {
   if (tableMap) {
-    return getModelFieldsFromResolverFields(resolverFields, tableMap);
+    return getModelFieldsFromResolverFields(fields, tableMap);
   } else {
     return [];
   }
@@ -34,4 +41,11 @@ export const getModelFieldsFromResolverFields = (
   }
 
   return [...selectedFields];
+};
+
+export const getFieldsFromResolver = (
+  info: GraphQLResolveInfo,
+  path?: string
+): string[] => {
+  return Object.keys(fieldsMap(info, { path }));
 };

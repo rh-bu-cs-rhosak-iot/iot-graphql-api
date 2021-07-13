@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsc && copyfiles -f src/graphql/schema/* dist/graphql/schema" ,
+    "build": "tsc && copyfiles -f src/graphql/schema/* dist/graphql/schema",
     "dev": "nodemon --config nodemon.json --exec 'ts-node' src/server.ts",
     "format": "prettier src/**/*.ts --trailing-comma=none --single-quote --write",
     "lint": "prettier src/**/*.ts --trailing-comma=none --single-quote --check"
@@ -16,6 +16,7 @@
     "@graphql-tools/load": "^6.2.8",
     "apollo-server": "^2.25.2",
     "apollo-server-express": "^2.25.2",
+    "axios": "^0.21.1",
     "env-var": "^7.0.1",
     "express": "^4.17.1",
     "graphql": "^15.5.1",

@@ -14,6 +14,8 @@ const config = {
   DB_USER: get('DB_USER').default('iotuser').asString(),
   DB_PASSWORD: get('DB_PASSWORD').default('iotuser').asString(),
   DB_DATABASE: get('DB_DATABASE').default('city_info').asString(),
+
+  METER_STATUS_SERVICE_URL: get('METER_STATUS_SERVICE_URL').asString(),
 };
 
 export = config;
