@@ -20,6 +20,7 @@ const resolvers = {
     ) => {
       let selectedFields: string[] = [];
       let requestedCount: boolean = false;
+      let requestedMeterStatus: boolean = false;
       if (info) {
         selectedFields = getSelectedFieldsFromResolverInfo(
           info,
@@ -29,11 +30,24 @@ const resolvers = {
         requestedCount = getResolverInfoFieldsList(info).some(
           (field: string) => field === 'count'
         );
+        requestedMeterStatus = getResolverInfoFieldsList(info, 'items').some(
+          (field: string) => field === 'status' || field === 'updated'
+        );
+      }
+      if (!args.page && requestedMeterStatus) {
+        args.page = {limit: 20, offset: 0};
       }
       const items = await context.dataProviders['meter'].findBy(
         args,
         selectedFields
       );
+      if (requestedMeterStatus) {
+        for (let i in items) {
+          let meterStatus = await MeterStatusService.getStatus(items[i].id);
+          items[i].status = meterStatus?.status;
+          items[i].updated = meterStatus?.timestamp;
+        }
+      }
       const resultPageInfo = {
         offset: 0,
         ...args.page
