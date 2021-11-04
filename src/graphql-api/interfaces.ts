@@ -32,3 +32,7 @@ export interface Context {
     [key: string]: ModelTableMap;
   };
 }
+
+export interface LooseObject {
+  [key: string]: any
+}

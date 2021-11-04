@@ -1,6 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { fieldsList, fieldsMap } from 'graphql-fields-list';
-import { Context, ModelTableMap } from './interfaces';
+import { Context, LooseObject, ModelTableMap } from './interfaces';
 
 export const getResolverInfoFieldsList = (
   info: GraphQLResolveInfo,
@@ -49,3 +49,11 @@ export const getFieldsFromResolver = (
 ): string[] => {
   return Object.keys(fieldsMap(info, { path }));
 };
+
+export const populateObject = (fields: string[], from: any): LooseObject => {
+  let obj:LooseObject = {};
+  for (let f in fields) {
+    obj[fields[f]] = from[fields[f]];
+  }
+  return obj;
+}

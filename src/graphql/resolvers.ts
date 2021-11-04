@@ -1,13 +1,14 @@
-import { GraphQLResolveInfo } from 'graphql';
-import { Context } from '../graphql-api/interfaces';
+import { GraphQLResolveInfo, isTypeSystemDefinitionNode } from 'graphql';
+import { Context, LooseObject } from '../graphql-api/interfaces';
 import { FindByArgs } from '../graphql-api/interfaces';
 import {
   getFieldsFromResolver,
   getResolverInfoFieldsList,
   getSelectedFields,
-  getSelectedFieldsFromResolverInfo
+  getSelectedFieldsFromResolverInfo,
+  populateObject
 } from '../graphql-api/utils';
-import { MeterStatusService } from '../iot-streams-service/iot-streams-service';
+import { MeterAggregatedService, MeterStatusService } from '../iot-streams-service/iot-streams-service';
 
 const resolvers = {
   Query: {
@@ -81,6 +82,41 @@ const resolvers = {
     },
     countMeters: async (parent, args, context: Context) => {
       return context.dataProviders['meter'].count();
+    },
+    streets: async (
+      parent,
+      args: FindByArgs,
+      context: Context,
+      info: GraphQLResolveInfo
+    ) => {
+      let selectedFields: string[] = [];
+      let requestedMeters: boolean = false;
+      if (info) {
+        selectedFields = getSelectedFieldsFromResolverInfo(
+          info,
+          context.tableMaps['streets'],
+          'items'
+        );
+        requestedMeters = getResolverInfoFieldsList(info, 'items').some(
+          (field: string) => field === 'meters'
+        );
+      }
+      if (!args.page && requestedMeters) {
+        args.page = {limit: 20, offset: 0};
+      }
+      const items: LooseObject[] = await context.dataProviders['streets'].findBy(
+        args,
+        selectedFields
+      );
+      if (requestedMeters) {
+        let requestedMetersFields = getResolverInfoFieldsList(info, 'items.meters')
+        for (let i in items) {
+          let aggregatedMeterStatus = await MeterAggregatedService.getMetersStatus(items[i].name);
+          let meters: LooseObject = populateObject(requestedMetersFields, aggregatedMeterStatus);;
+          items[i].meters = meters;
+        }
+      }
+      return {items};
     }
   },
   Meter: {

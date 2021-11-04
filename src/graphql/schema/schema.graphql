@@ -14,6 +14,25 @@ type MeterResultList {
   count: Int
 }
 
+type MetersStatus {
+  available: Int
+  occupied: Int
+  outoforder: Int
+  updated: Int
+}
+
+type Street{
+  name: String!
+  meters: MetersStatus
+}
+
+type StreetResultList {
+  items: [Street]!
+  offset: Int
+  limit: Int
+  count: Int 
+}
+
 input StringInput {
   ne: String
   eq: String
@@ -35,6 +54,13 @@ input MeterFilter {
   and: [MeterFilter!]
   or: [MeterFilter!]
   not: MeterFilter
+}
+
+input StreetFilter {
+  name: StringInput
+  and: [StreetFilter!]
+  or: [StreetFilter!]
+  not: StreetFilter
 }
 
 input PageRequest {
@@ -60,4 +86,9 @@ type Query {
   ): MeterResultList!
   meter(id: ID!): Meter
   countMeters: Int
+  streets(
+    filter: StreetFilter
+    page: PageRequest
+    orderBy: OrderByInput
+  ): StreetResultList!
 }

@@ -9,19 +9,34 @@ const meterModel: ModelTableMap = {
   fields: [`id`, `address`, `longitude`, `latitude`]
 };
 
+const streetsModel: ModelTableMap = {
+  tableName: `streets`,
+  fields: [`name`]
+}
+
 function createMeterKnexDbProvider(db: Knex) {
   return new KnexDBDataProvider(meterModel, db);
+}
+
+function createStreetsKnexDbProvider(db: Knex) {
+  return new KnexDBDataProvider(streetsModel, db);
 }
 
 const meterDataProvider: GraphQLDataProvider<any> = createMeterKnexDbProvider(
   connectDB()
 );
 
+const streetsDataProvider: GraphQLDataProvider<any> = createStreetsKnexDbProvider(
+  connectDB()
+);
+
 export const context: Context = {
   dataProviders: {
-    meter: meterDataProvider
+    meter: meterDataProvider,
+    streets: streetsDataProvider
   },
   tableMaps: {
-    meter: meterModel
+    meter: meterModel,
+    streets: streetsModel
   }
 };

@@ -16,6 +16,7 @@ const config = {
   DB_DATABASE: get('DB_DATABASE').default('city_info').asString(),
 
   METER_STATUS_SERVICE_URL: get('METER_STATUS_SERVICE_URL').asString(),
+  METER_AGGREGATED_STATUS_SERVICE_URL: get('METER_AGGREGATED_STATUS_SERVICE_URL').asString(),
 };
 
 export = config;
